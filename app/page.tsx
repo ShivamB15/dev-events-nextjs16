@@ -1,19 +1,22 @@
 import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
-import {IEvent} from "@/database";
-import {cacheLife} from "next/cache";
+// removed IEvent import because the events list uses EventItem shape
+import { cacheLife } from "next/cache";
+import events from "@/lib/constants";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Page = async () => {
-    'use cache';
-    cacheLife('hours')
-    const response = await fetch(`${BASE_URL}/api/events`);
-    const { events } = await response.json();
+    "use cache";
+    cacheLife("hours");
+    // const response = await fetch(`${BASE_URL}/api/events`);
+    // const { events } = await response.json();
 
     return (
         <section>
-            <h1 className="text-center">The Hub for Every Dev <br /> Event You Can't Miss</h1>
+            <h1 className="text-center">
+                The Hub for Every Dev <br /> Event You Can't Miss
+            </h1>
             <p className="text-center mt-5">Hackathons, Meetups, and Conferences, All in One Place</p>
 
             <ExploreBtn />
@@ -22,15 +25,19 @@ const Page = async () => {
                 <h3>Featured Events</h3>
 
                 <ul className="events">
-                    {events && events.length > 0 && events.map((event: IEvent) => (
-                        <li key={event.title} className="list-none">
-                            <EventCard {...event} />
-                        </li>
-                    ))}
+                    {Array.isArray(events) && events.length > 0 ? (
+                        events.map((event) => (
+                            <li key={event.slug} className="list-none">
+                                <EventCard {...event} />
+                            </li>
+                        ))
+                    ) : (
+                        <li className="list-none">No events found.</li>
+                    )}
                 </ul>
             </div>
         </section>
-    )
-}
+    );
+};
 
 export default Page;
