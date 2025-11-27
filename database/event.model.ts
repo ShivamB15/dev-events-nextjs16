@@ -2,7 +2,6 @@ import { Schema, model, models, Document } from 'mongoose';
 
 // TypeScript interface for Event document
 export interface IEvent extends Document {
-    id: Key | null | undefined;
     title: string;
     slug: string;
     description: string;
@@ -119,7 +118,7 @@ EventSchema.pre('save', async function () {
         let baseSlug = generateSlug(event.title);
         let slug = baseSlug;
         let counter = 1;
-        
+
         // Check for existing slugs and append counter if collision
         while (await Event.exists({ slug, _id: { $ne: event._id } })) {
             slug = `${baseSlug}-${counter}`;

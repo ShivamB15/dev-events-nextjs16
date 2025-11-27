@@ -12,4 +12,5 @@ const ExploreBtn = () => {
         </button>
     )
 }
+
 export default ExploreBtn
